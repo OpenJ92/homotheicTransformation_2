@@ -53,13 +53,13 @@ if __name__ == '__main__':
         
         return xs, ys, zs
 
-    #xs0, ys0, zs0 = construct_(hT.ttu, 0)
-    #xs2, ys2, zs2 = construct_(hT.ttu, 2)
-    #xs3, ys3, zs3 = hT.obs.location[0], hT.obs.location[1], hT.obs.location[2]
-    #ax.scatter(xs2, ys2, zs2)
-    #ax.scatter(xs0, ys0, zs0)
-    #ax.scatter(xs3, ys3, zs3)
-    #plt.show()
+    xs0, ys0, zs0 = construct_(hT.ttu, 0)
+    xs2, ys2, zs2 = construct_(hT.ttu, 2)
+    xs3, ys3, zs3 = hT.obs.location[0], hT.obs.location[1], hT.obs.location[2]
+    ax.scatter(xs2, ys2, zs2)
+    ax.scatter(xs0, ys0, zs0)
+    ax.scatter(xs3, ys3, zs3)
+    plt.show()
 
     def plot_transformed_obj(mti):
         K = [mti[:,i,:].flatten() for i in range(mti.shape[1])]
