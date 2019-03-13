@@ -38,9 +38,9 @@ class elipsiod():
         self.shape += self.dt*self.velocity
 
     def rotate_shape(self, unit, theta):
-        rotation_m = self.construct_basis(unit, theta*self.dt, np.array([1, 1, 1]))
+        rotation_ = self.construct_basis(unit, theta*self.dt, np.array([1, 1, 1]))
         self.shape = self.shape - self.init_location
-        self.shape = self.shape @ rotation_m
+        self.shape = self.shape @ rotation_
         self.shape = self.shape + self.init_location
 
     def construct_graph(self):
