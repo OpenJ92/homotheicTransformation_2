@@ -23,7 +23,7 @@ class elipsiod():
         return magnitudes * np.array([[a11, a12, a13], [a21, a22, a23], [a31, a32, a33]])
 
     def construct_shape(self):
-        domain_sample = 2*np.pi*np.random.random_sample(size=(500, 2))
+        domain_sample = 2*np.pi*np.random.random_sample(size=(50, 2))
         sphere_sample = np.apply_along_axis(self.make_sphere, 1, domain_sample)
         range_sample = sphere_sample @ self.basis.T
         return range_sample + self.init_location
@@ -41,7 +41,7 @@ class elipsiod():
         rotation_m = self.construct_basis(unit, theta*self.dt, np.array([1, 1, 1]))
         self.shape = self.shape - self.init_location
         self.shape = self.shape @ rotation_m
-        self.shape =  self.shape + self.init_location
+        self.shape = self.shape + self.init_location
 
     def construct_graph(self):
         from mpl_toolkits.mplot3d import Axes3D
@@ -60,9 +60,6 @@ class elipsiod():
         ax = self.ax
 
         ax.scatter(self.shape[:, 0], self.shape[:, 1], self.shape[:, 2], color='blue')
-        # ax.set_xlim(-2, 2)
-        # ax.set_ylim(-2, 2)
-        # ax.set_zlim(-2, 2)
 
-        if show == True:
+        if show:
             plt.show()
