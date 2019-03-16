@@ -3,26 +3,31 @@ from class_observer import observer
 from class_elipsoid import elipsiod
 
 class homotheicTransform():
-    def __init__(self, obs, el, light_speed):
+    def __init__(self, obs, el, light_speed, time_intervals):
         self.el = el
         self.obs = obs
         self.ls = light_speed
         self.fig, self.ax = self.construct_graph()
-        self.ttu = self.tensor_time_unit()
+        self.ttu = self.tensor_time_unit(time_intervals)
 
     def y_hat(self):
         A = -1*(self.el.shape - self.obs.location)
         B = np.apply_along_axis(lambda x: x / np.linalg.norm(x), 1, A)
         return B
 
-    def tensor_time_unit(self):
+    # is it correct to construct the positions of our photons at the time_interval*self.dt
+    # in reverse. Something bizzare is occuring where no matter how long we run the simmulation
+    # reverse, the light will not arrive at the observation point is the object is moving faster
+    # than the 'speed of light'. Perhaps we should refactor so that we update the positions of 
+    # the emmited light and store in another tensor.  I'm just not sure.
+    def tensor_time_unit(self, time_intervals):
         A = []
-        for i in np.linspace(0, self.el.dt*200, 200):
+        for i in np.linspace(0, self.el.dt*time_intervals, time_intervals):
             A.append(np.stack([self.el.shape,
                      self.y_hat(),
                      (self.el.shape + (i * self.ls * self.y_hat()))]))
             self.el.translate_shape()
-            self.el.rotate_shape(np.array([1/np.sqrt(2), 0, 1/np.sqrt(2)]), np.pi/5)
+            self.el.rotate_shape(np.array([1/np.sqrt(2), 0, 1/np.sqrt(2)]), np.pi/25)
         B = np.stack(A)
         C = np.einsum('ijkl -> klji', B)
         return C
