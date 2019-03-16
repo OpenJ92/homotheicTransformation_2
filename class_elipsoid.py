@@ -7,7 +7,6 @@ class elipsiod():
         self.basis = self.construct_basis(unit, theta, magnitudes)
         self.shape = self.construct_shape()
         self.dt = dt
-        self.fig, self.ax = self.construct_graph()
 
     def construct_basis(self, unit, theta, magnitudes):
         a11 = np.cos(theta) + (unit[0]**2)*(1 - np.cos(theta))
@@ -42,24 +41,3 @@ class elipsiod():
         self.shape = self.shape - self.init_location
         self.shape = self.shape @ rotation_
         self.shape = self.shape + self.init_location
-
-    def construct_graph(self):
-        from mpl_toolkits.mplot3d import Axes3D
-        import matplotlib.pyplot as plt
-
-        fig = plt.figure()
-        ax = fig.add_subplot(111, projection='3d')
-
-        return fig, ax
-
-    def plot(self, show=True):
-        from mpl_toolkits.mplot3d import Axes3D
-        import matplotlib.pyplot as plt
-
-        fig = self.fig
-        ax = self.ax
-
-        ax.scatter(self.shape[:, 0], self.shape[:, 1], self.shape[:, 2], color='blue')
-
-        if show:
-            plt.show()
