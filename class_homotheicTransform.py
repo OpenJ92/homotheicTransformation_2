@@ -1,13 +1,15 @@
 import numpy as np
 from class_observer import observer
 from class_elipsoid import elipsiod
+import matplotlib.pyplot as plt
+from mpl_toolkits.mplot3d import Axes3D
 
 class homotheicTransform():
     def __init__(self, obs, el, light_speed, time_intervals):
         self.el = el
         self.obs = obs
         self.ls = light_speed
-        self.fig, self.ax = self.construct_graph()
+        # self.fig, self.ax = self.construct_graph()
         self.ttu = self.tensor_time_unit(time_intervals)
 
     def y_hat(self):
@@ -55,4 +57,3 @@ class homotheicTransform():
         mti = self.mask_time_interval(exp, var)
         xyz = [mti[:, i, :].flatten() for i in range(0, 3)]
         ax.scatter(*xyz)
-
