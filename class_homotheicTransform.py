@@ -22,6 +22,7 @@ class homotheicTransform():
     # reverse, the light will not arrive at the observation point is the object is moving faster
     # than the 'speed of light'. Perhaps we should refactor so that we update the positions of 
     # the emmited light and store in another tensor.  I'm just not sure.
+
     def tensor_time_unit(self, time_intervals):
         A = []
         for i in np.linspace(0, self.el.dt*time_intervals, time_intervals):
@@ -33,6 +34,9 @@ class homotheicTransform():
         B = np.stack(A)
         C = np.einsum('ijkl -> klji', B)
         return C
+    
+    def push_ttu(self):
+        self.ttu[:,:,2,:] += self.el.dt * self.ttu[:,:,1,:]
 
     def mask_time_interval(self, exp, var):
         get_transform = self.ttu[:, :, 2, :]
