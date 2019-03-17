@@ -17,15 +17,9 @@ class homotheicTransform():
         B = np.apply_along_axis(lambda x: x / np.linalg.norm(x), 1, A)
         return B
 
-    # is it correct to construct the positions of our photons at the time_interval*self.dt
-    # in reverse. Something bizzare is occuring where no matter how long we run the simmulation
-    # reverse, the light will not arrive at the observation point is the object is moving faster
-    # than the 'speed of light'. Perhaps we should refactor so that we update the positions of 
-    # the emmited light and store in another tensor.  I'm just not sure.
-
     def tensor_time_unit(self, time_intervals):
         A = []
-        for i in np.linspace(0, self.el.dt*time_intervals, time_intervals):
+        for i in np.flip(np.linspace(0, self.el.dt*time_intervals, time_intervals)):
             A.append(np.stack([self.el.shape,
                      self.y_hat(),
                      (self.el.shape + (i * self.ls * self.y_hat()))]))
@@ -36,7 +30,7 @@ class homotheicTransform():
         return C
     
     def push_ttu(self):
-        self.ttu[:,:,2,:] += self.el.dt * self.ttu[:,:,1,:]
+        self.ttu[:, :, 2, :] += self.el.dt * self.ttu[:, :, 1, :]
 
     def mask_time_interval(self, exp, var):
         get_transform = self.ttu[:, :, 2, :]
@@ -54,7 +48,7 @@ class homotheicTransform():
         return fig, ax
 
     def plot_ttu(self, index, ax):
-        xyz = [self.ttu[:, i, index, :].flatten() for i in range(0,3)]
+        xyz = [self.ttu[:, i, index, :].flatten() for i in range(0, 3)]
         ax.scatter(*xyz)
 
     def plot_mti(self, exp, var, ax):
