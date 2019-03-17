@@ -9,7 +9,6 @@ class homotheicTransform():
         self.el = el
         self.obs = obs
         self.ls = light_speed
-        # self.fig, self.ax = self.construct_graph()
         self.ttu = self.tensor_time_unit(time_intervals)
 
     def y_hat(self):
@@ -28,24 +27,16 @@ class homotheicTransform():
         B = np.stack(A)
         C = np.einsum('ijkl -> klji', B)
         return C
-    
+
     def push_ttu(self):
         self.ttu[:, :, 2, :] += self.el.dt * self.ttu[:, :, 1, :]
 
     def mask_time_interval(self, exp, var):
         get_transform = self.ttu[:, :, 2, :]
-        mask_transform = np.apply_along_axis(lambda x: exp - var < np.linalg.norm(self.obs.location - x) < exp + var, 1, get_transform)
+        f = lambda x: exp - var < np.linalg.norm(self.obs.location - x) < exp + var
+        mask_transform = np.apply_along_axis(f, 1, get_transform)
         full_mask_transform = np.stack([mask_transform for i in range(get_transform.shape[1])], axis=1).astype('int')
         return self.ttu[:, :, 0, :] * full_mask_transform
-
-    def construct_graph(self):
-        import matplotlib.pyplot as plt
-        from mpl_toolkits.mplot3d import Axes3D
-
-        fig = plt.figure()
-        ax = fig.add_subplot(111, projection='3d')
-
-        return fig, ax
 
     def plot_ttu(self, index, ax):
         xyz = [self.ttu[:, i, index, :].flatten() for i in range(0, 3)]
